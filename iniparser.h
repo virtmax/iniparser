@@ -30,6 +30,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <regex>
 
 
@@ -130,6 +131,11 @@ public:
         LineEntry lineEntry;
         for(size_t i = 0; i < lines.size(); i++)
         {
+            lines[i].erase(0, lines[i].find_first_not_of(" \t\n\r\f\v"));   // trim leading whitespaces
+
+            if(lines[i].size() == 0 || lines[i].at(0) == '#')
+                continue;
+
             std::smatch match;
 
             lineEntry.type = LineEntry::TYPE::Comment;
@@ -197,14 +203,13 @@ public:
 
     ValueVariant& operator[](const std::string& section_dot_key)
     {
-        const std::regex pattern("^\\w+\\.\\w+$");
         std::smatch match;
-        if(std::regex_match(section_dot_key, match, pattern))
+        if(std::regex_match(section_dot_key, match, std::regex("^.+\\..+$")))
         {
             auto tokens = tokenize(section_dot_key, ".");
             return storage[tokens[0]][tokens[1]];
         }
-        else if(std::regex_match(section_dot_key, match, std::regex("^\\w+$")))
+        else if(std::regex_match(section_dot_key, match, std::regex("^.+$")))
         {
             return storage[""][section_dot_key];
         }
