@@ -7,7 +7,7 @@
 
     The MIT License
 
-    Copyright 2018 Maxim Singer
+    Copyright 2019 Maxim Singer
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of this software
     and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -101,6 +101,7 @@ public:
                     file << keyVal.first << " = " << keyVal.second << std::endl;
                     keyVal.second.saved = true;
                 }
+                file << std::endl;
 
                 beforeFirstSection = false;
             }
